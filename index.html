@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Image Gallery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #1e2a38;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --batch-hzb211: #3498db;
+            --batch-hzb222: #9b59b6;
+            --batch-hzb233: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #fff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+	.batch-dropdown select:hover {
+  background: linear-gradient(to right, rgba(52, 152, 219, 0.4), rgba(44, 62, 80, 0.4));
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3), 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+.batch-dropdown select:focus {
+  outline: none;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3), 0 0 15px rgba(52, 152, 219, 0.5);
+}
+
+.batch-dropdown select option {
+  background: rgba(30, 42, 56, 0.95);
+  color: #fff;
+}
+
+.batch-dropdown select option:checked {
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+}
+
+border: 1px solid rgba(52, 152, 219, 0.5);
+box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3), 0 4px 6px rgba(0, 0, 0, 0.1);
+background: linear-gradient(to right, rgba(52, 152, 219, 0.3), rgba(44, 62, 80, 0.3));
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+            color: #a0aec0;
+        }
+        
+        .batch-section {
+            background: rgba(9, 174, 6, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px dashed var(--success);
+        }
+        
+        .batch-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .batch-header i {
+            font-size: 1.5rem;
+            color: var(--success);
+        }
+        
+        .batch-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .batch-label {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .batch-dropdown {
+            position: relative;
+            min-width: 200px;
+        }
+        
+        .batch-dropdown select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 30px;
+            border: none;
+            background: rgba(0, 5, 2, 0.1);
+            color: white;
+            font-size: 1rem;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+            appearance: none;
+            cursor: pointer;
+            padding-right: 40px;
+        }
+        
+        .batch-dropdown::after {
+            content: "▼";
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            pointer-events: none;
+        }
+        
+        .batch-indicator {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .batch-hzb211 {
+            background: var(--batch-hzb211);
+        }
+        
+        .batch-hzb222 {
+            background: var(--batch-hzb222);
+        }
+        
+        .batch-hzb233 {
+            background: var(--batch-hzb233);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .control-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .search-box {
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: none;
+            width: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(to right, var(--secondary), var(--dark));
+        }
+        
+        .btn-accent {
+            background: linear-gradient(to right, var(--accent), var(--danger));
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: rgba(30, 30, 50, 0.7);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.1rem;
+            position: sticky;
+            top: 0;
+        }
+        
+        th:nth-child(1),
+        th:nth-child(2) {
+            text-align: center;
+        }
+        
+        tr:nth-child(even) {
+            background: rgba(50, 50, 70, 0.5);
+        }
+        
+        tr:nth-child(odd) {
+            background: rgba(40, 40, 60, 0.5);
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(100, 100, 150, 0.3);
+        }
+        
+        td:nth-child(1),
+        td:nth-child(2) {
+            text-align: center;
+            vertical-align: middle;
+        }
+        
+        .student-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .student-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 10%;
+            object-fit: cover;
+            border: 1px solid var(--primary);
+            background: linear-gradient(45deg, var(--primary), #90e0ef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .student-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        
+        .student-id {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-align: center;
+        }
+        
+        .image-cell {
+            text-align: center;
+            vertical-align: top;
+        }
+        
+        .image-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--dark);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .student-image {
+            width: 99%;
+            height: 99%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .slider-container {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .slider-label {
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            color: #90e0ef;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .brightness-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--secondary);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .brightness-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .figure-label {
+            font-size: 0.9rem;
+            margin-top: 5px;
+            color: #a0aec0;
+            font-weight: 500;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(100, 100, 150, 0.3);
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: #90e0ef;
+        }
+        
+        .status-bar {
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-value {
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        @media (max-width: 1100px) {
+            .container {
+                padding: 15px;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            th, td {
+                min-width: 150px;
+            }
+            
+            .image-container {
+                width: 130px;
+                height: 130px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .student-avatar {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+            
+            .image-container {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .control-group {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .search-box {
+                width: 100%;
+                max-width: 400px;
+            }
+            
+            .status-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-images"></i> Student Image Gallery</h1>
+            <div class="subtitle">Browse student images by batch selection</div>
+        </header>
+        
+        <div class="batch-section">
+            <div class="batch-header">
+                <i class="fas fa-layer-group"></i>
+                <h2>Batch Selection</h2>
+            </div>
+            <div class="batch-selector">
+                <div class="batch-label">Select Batch:</div>
+                <div class="batch-dropdown">
+                    <select id="batchSelector" onchange="loadBatch(this.value)">
+                        <option value="HZB211">HZB211</option>
+                        <option value="HZB222">HZB222</option>
+                        <option value="HZB233">HZB233</option>
+                    </select>
+                </div>
+                <div class="batch-indicator batch-hzb211" id="currentBatchIndicator">Batch: HZB211</div>
+            </div>
+            <div class="status-bar">
+                <div class="status-item">
+                    <i class="fas fa-folder-open"></i>
+                    <span>Images Path: <span class="status-value">images/</span></span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-users"></i>
+                    <span>Students Loaded: <span class="status-value" id="studentCount">0</span></span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-image"></i>
+                    <span>Total Images: <span class="status-value" id="imageCount">0</span></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <input type="text" class="search-box" placeholder="Search by student name..." id="searchInput">
+            <div class="control-group">
+                <button class="btn" onclick="toggleSortOrder()">
+                    <i class="fas fa-sort-alpha-down"></i> Sort by Name
+                </button>
+                <button class="btn btn-secondary" onclick="refreshGallery()">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+                <button class="btn btn-accent" onclick="resetAllSliders()">
+                    <i class="fas fa-adjust"></i> Reset Brightness
+                </button>
+            </div>
+        </div>
+        
+        <table id="galleryTable" class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th>S. No.</th>
+                    <th>Student Name</th>
+                    <th>Figure 01</th>
+                    <th>Figure 02</th>
+                    <th>Figure 03</th>
+                    <th>Figure 04</th>
+                    <th>Figure 05</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="7" class="no-results">
+                        <i class="fas fa-spinner fa-spin"></i> Loading gallery...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <footer>
+            <p>Student Image Gallery | &copy; Aadil Solution</p>
+            <p>All Rights Reserved. Contact: +91 8862862617</p>
+        </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Student data organized by batch
+        const batches = {
+            "HZB211": [
+                "126_REENA KUMARI 4755",
+"127_YASHODA KUMARI 8516",
+"128_RUKMANI KUMARI 8541",
+"129_SUNAYANA KUMARI 4670",
+"130_NICKY KUMARI 3062",
+"131_PINKI KUMARI 5177",
+"132_DALI KUMARI 6875",
+"133_BINA KUMARI 8941",
+"134_PREMA DEVI 6411",
+"135_PRITY KUMARI 0624",
+"136_KUMKUM KUMARI 8944",
+"137_PRATIMA KUMARI 8403",
+"138_SUMAN KUMARI 9042",
+"139_SONI KUMARI 5070",
+"140_PUJA KUMARI 8956",
+"141_ANJALI KUMARI 1581",
+"142_DEVANTI KUMARI 3501",
+"143_PRIYA KUMARI 0432",
+"144_MADHU KUMARI 3681",
+"145_KOMAL RANI 7238",
+"146_KHUSHBOO KUMARI 9978",
+"147_SWEETY KUMARI 7480",
+"148_ROSHNI KUMARI 6750"
+            ],
+            "HZB222": [
+                "1_MAMTA KUMARI 8492",
+"2_LAXMI KUMARI 7352",
+"3_GULSHAN KHATOON 3654",
+"4_KANCHAN KUMARI 8247",
+"5_KARINA KUMARI 9106",
+"6_SEHANA KHATUN 1416",
+"7_RADHIKA KUMARI 0565",
+"8_SEEMA KUMARI 7563",
+"9_JULI KUMARI 0727",
+"10_SAPNA KUMARI 5564",
+"11_KHUSHBOO DEVI 9232",
+"12_PIYASO KUMARI 1142",
+"13_KANCHAN KUMARI 0423",
+"14_NEHA KUMARI 1833",
+"15_NEHA KUMARI 4818",
+"16_SITA KUMARI 4676",
+"17_PRATIMA KUMARI 5596",
+"18_ANJALI KUMARI 4599",
+"19_SIMRAN KUMARI 6803",
+"20_ANJALI KUMARI 4601",
+"21_REKHA KUMARI 1379",
+"22_SATYAM KUMAR DANGI 2007",
+"23_RAHUL RAM 8012",
+"24_RINA KUMARI 5037",
+"25_ASHISH KUMAR 6139",
+"26_SUMIT KUMAR 7808",
+"27_ASHISH KUMAR 8663",
+"28_AVINASH KUMAR 8709",
+"29_SANTOSH KUMAR 3320"
+            ],
+            "HZB233": [
+                "240_DHARAMPAL KUMAR 7568",
+"241_SONAM KUMARI 0015",
+"242_KHUSHBOO KUMARI 8594",
+"243_RAVINA KUMARI 5687",
+"244_SHOBHA KUMARI 9649",
+"245_SITA KUMARI 9866",
+"246_MUSKAN PATRA 7253",
+"247_SONI KUMARI 8579",
+"248_NANDANI KUMARI 1110",
+"249_RAVI KUMAR 5516",
+"250_SURAJ KUMAR 5073",
+"251_PINTU KUMAR 7689",
+"252_AARYAN RAJ 4735",
+"253_ROUSHAN SHARMA 3332",
+"254_PRAFUL KUJUR 6267",
+"255_USHA KUMARI 7658",
+"256_KARANTI KUMARI 8908",
+"257_KOSHILYA KUMARI 7554",
+"258_KARAN PASWAN 1835",
+"259_BITU KUMARI 5402",
+"260_RAHUL KUMAR 9351",
+"261_LAXMI KUMARI 7619",
+"262_SANDYA KUMARI 3080",
+"263_KANCHAN KUMARI 9906",
+"264_NITU KUMARI 8900",
+"265_AVINASH KUMAR 3988",
+"266_RANJAN KUMAR YADAV 9425",
+"267_AMAN KUMAR 3101",
+"268_BHASHKAR KUMAR 7041",
+"269_TANNU KUMARI 2386",
+"270_KHUSHI KUMARI 3389",
+"271_PRIYANKA KUMARI 4002",
+"272_SANJANA KUMARI 8658",
+"273_SAPNA KUMARI 6280",
+"274_SANI KUMAR 3388",
+"275_SONU KUMAR 7796",
+"276_NAINA KUMARI 5520"
+            ]
+        };
+        
+        let students = [];
+        let sortAscending = true;
+        let currentBatch = "HZB211";
+        
+        // Initialize gallery
+        function initGallery() {
+            loadBatch(currentBatch);
+        }
+        
+        // Load batch data
+        function loadBatch(batchName) {
+            currentBatch = batchName;
+            students = getStudentsFromFolders(batchName, batches[batchName]);
+            generateTableRows(students);
+            updateStatusBar();
+            
+            // Update batch indicator
+            const indicator = document.getElementById('currentBatchIndicator');
+            indicator.textContent = `Batch: ${batchName}`;
+            indicator.className = `batch-indicator batch-${batchName.toLowerCase()}`;
+        }
+        
+        // Function to extract student data from folder names
+        function getStudentsFromFolders(batch, folders) {
+            return folders.map(folder => {
+                // Split folder name at the first underscore
+                const firstUnderscore = folder.indexOf('_');
+                if (firstUnderscore === -1) return null;
+                
+                const id = folder.substring(0, firstUnderscore);
+                const name = folder.substring(firstUnderscore + 1).replace(/_/g, ' ');
+                
+                return {
+                    id: id,
+                    name: name,
+                    folder: folder,
+                    batch: batch,
+                    images: Array.from({length: 5}, (_, i) => ({
+                        name: `original_${i+1}.png`,
+                        url: `images/${batch}/${folder}/original_${i+1}.png`
+                    }))
+                };
+            }).filter(student => student !== null);
+        }
+        
+        // Function to generate table rows
+        function generateTableRows(data) {
+            const tbody = document.querySelector('#galleryTable tbody');
+            
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="no-results">
+                        <i class="fas fa-search"></i> No matching students found
+                    </td></tr>`;
+                return;
+            }
+            
+            tbody.innerHTML = '';
+            
+            data.forEach((student, index) => {
+                const row = document.createElement('tr');
+                
+                // S. No. cell - centered
+                const idCell = document.createElement('td');
+                idCell.textContent = index + 1;
+                row.appendChild(idCell);
+                
+                // Student Name cell - centered
+                const nameCell = document.createElement('td');
+                const initials = student.name.split(' ').map(n => n[0]).join('');
+                nameCell.innerHTML = `
+                    <div class="student-info">
+                        <div class="student-avatar">${initials}</div>
+                        <div>
+                            <div class="student-name">${student.name}</div>
+                            <div class="student-id">ID: ${student.id}</div>
+                        </div>
+                    </div>
+                `;
+                row.appendChild(nameCell);
+                
+                // Image cells (Figure 01 to Figure 05)
+                for (let i = 0; i < 5; i++) {
+                    const imgCell = document.createElement('td');
+                    imgCell.className = 'image-cell';
+                    
+                    if (i < student.images.length) {
+                        const image = student.images[i];
+                        imgCell.innerHTML = `
+                            <div class="image-container">
+                                <img src="${image.url}" alt="${student.name} - Figure ${i+1}" 
+                                     class="student-image" id="img-${student.id}-${i}" 
+                                     onerror="this.onerror=null; this.src='https://via.placeholder.com/180x180?text=Image+Not+Found';">
+                            </div>
+                            <div class="slider-container">
+                                <div class="slider-label">
+                                    <i class="fas fa-sun"></i> Brightness
+                                </div>
+                                <input type="range" min="0" max="200" value="100" 
+                                       class="brightness-slider" 
+                                       oninput="adjustBrightness(this, 'img-${student.id}-${i}')">
+                            </div>
+                            <div class="figure-label">Figure ${i+1}</div>
+                        `;
+                    } else {
+                        imgCell.innerHTML = `
+                            <div class="image-container">
+                                <div style="color: #aaa; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; height: 100%;">
+                                    Image missing
+                                </div>
+                            </div>
+                            <div class="figure-label">Figure ${i+1}</div>
+                        `;
+                    }
+                    
+                    row.appendChild(imgCell);
+                }
+                
+                tbody.appendChild(row);
+            });
+        }
+        
+        // Function to adjust image brightness
+        function adjustBrightness(slider, imageId) {
+            const image = document.getElementById(imageId);
+            if (image) {
+                const brightnessValue = slider.value;
+                image.style.filter = `brightness(${brightnessValue}%)`;
+            }
+        }
+        
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredStudents = students.filter(student => 
+                student.name.toLowerCase().includes(searchTerm) || 
+                student.id.toLowerCase().includes(searchTerm) || 
+                student.folder.toLowerCase().includes(searchTerm)
+            );
+            generateTableRows(filteredStudents);
+        });
+        
+        // Toggle sort order
+        function toggleSortOrder() {
+            sortAscending = !sortAscending;
+            students.sort((a, b) => {
+                const nameA = a.name.toLowerCase();
+                const nameB = b.name.toLowerCase();
+                return sortAscending ? 
+                    nameA.localeCompare(nameB) : 
+                    nameB.localeCompare(nameA);
+            });
+            generateTableRows(students);
+            
+            // Update button text
+            const sortBtn = document.querySelector('.btn');
+            sortBtn.innerHTML = sortAscending ? 
+                '<i class="fas fa-sort-alpha-down"></i> Sort by Name' : 
+                '<i class="fas fa-sort-alpha-up"></i> Sort by Name';
+        }
+        
+        // Refresh gallery
+        function refreshGallery() {
+            loadBatch(currentBatch);
+            document.getElementById('searchInput').value = '';
+        }
+        
+        // Reset all sliders to default brightness
+        function resetAllSliders() {
+            const sliders = document.querySelectorAll('.brightness-slider');
+            sliders.forEach(slider => {
+                slider.value = 100;
+                const imageId = slider.getAttribute('oninput').match(/'(.*?)'/)[1];
+                const image = document.getElementById(imageId);
+                if (image) {
+                    image.style.filter = 'brightness(100%)';
+                }
+            });
+        }
+        
+        // Update status bar
+        function updateStatusBar() {
+            document.getElementById('studentCount').textContent = students.length;
+            
+            let imageTotal = 0;
+            students.forEach(student => {
+                imageTotal += student.images.length;
+            });
+            document.getElementById('imageCount').textContent = imageTotal;
+        }
+        
+        // Initialize the gallery
+        window.onload = initGallery;
+    </script>
+</body>
+</html>
